@@ -1,0 +1,16 @@
+{
+  "weights": {
+    "sentiment": 0.4,
+    "document_quality": 0.35,
+    "risk_assessment": 0.25
+  },
+  "templates": {
+    "excellent": "\ud83d\ude80 STRONG BUY SIGNAL: {company} shows exceptional potential with {sentiment_desc} market sentiment, {doc_desc} financial health, and {risk_desc} risk profile. {key_insights}",
+    "good": "\u2705 POSITIVE OUTLOOK: {company} demonstrates solid fundamentals with {sentiment_desc} market reception, {doc_desc} business metrics, and {risk_desc} risk management. {key_insights}",
+    "neutral": "\u2696\ufe0f HOLD/NEUTRAL: {company} presents a balanced investment profile with {sentiment_desc} market sentiment, {doc_desc} financial position, and {risk_desc} risk factors. {key_insights}",
+    "cautious": "\u26a0\ufe0f PROCEED WITH CAUTION: {company} shows concerning signals with {sentiment_desc} market sentiment, {doc_desc} financial indicators, and {risk_desc} risk elements. {key_insights}",
+    "negative": "\ud83d\udd34 AVOID/SELL: {company} exhibits significant risks with {sentiment_desc} market reception, {doc_desc} financial health, and {risk_desc} risk profile. {key_insights}"
+  },
+  "model_type": "investment_insight_generator",
+  "version": "1.0"
+}

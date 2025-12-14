@@ -1,0 +1,6 @@
+Company,Overall Score,Sentiment,Document Quality,Risk Score,Recommendation,Rank
+Apple,0.753,1.0,0.4,0.85,BUY,1
+Microsoft,0.677,0.9,0.3,0.85,HOLD,2
+Amazon,0.578,0.8,0.2,0.75,WEAK HOLD,3
+Meta Platforms,0.535,0.7,0.3,0.6,WEAK HOLD,4
+Tesla,0.413,0.30000000000000004,0.3,0.75,WEAK HOLD,5

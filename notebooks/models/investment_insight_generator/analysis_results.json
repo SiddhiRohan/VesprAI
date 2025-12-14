@@ -1,0 +1,159 @@
+{
+  "Apple Inc.": {
+    "company": "Apple Inc.",
+    "overall_score": 0.753,
+    "recommendation": "BUY",
+    "narrative": "\u2705 POSITIVE OUTLOOK: Apple Inc. demonstrates solid fundamentals with strongly positive market reception, adequate business metrics, and low-risk risk management. Revenue/sales performance highlighted",
+    "components": {
+      "sentiment": {
+        "score": 1.0,
+        "label": "positive",
+        "confidence": 1.0,
+        "text_sample": "Apple reported strong quarterly earnings with iPhone sales exceeding expectations. The company beat ..."
+      },
+      "document": {
+        "summary": "Apple Inc. demonstrates solid financial performance with revenue of $394.3 billion and net income of $99.8 billion. The company maintains strong cash position of $165 billion and continues strategic investments in R&D.",
+        "quality_score": 0.4,
+        "key_insights": [
+          "Revenue/sales performance highlighted"
+        ],
+        "document_length": 378
+      },
+      "risk": {
+        "risk_score": 0.85,
+        "risk_level": "low",
+        "risk_factors": [
+          "Standard business risks"
+        ]
+      }
+    },
+    "processing_time": 0.0,
+    "timestamp": "2025-12-14 20:16:40"
+  },
+  "Tesla Inc.": {
+    "company": "Tesla Inc.",
+    "overall_score": 0.413,
+    "recommendation": "WEAK HOLD",
+    "narrative": "\u26a0\ufe0f PROCEED WITH CAUTION: Tesla Inc. shows concerning signals with negative market sentiment, adequate financial indicators, and low-risk risk elements. Revenue/sales performance highlighted. Growth trends identified",
+    "components": {
+      "sentiment": {
+        "score": 0.30000000000000004,
+        "label": "negative",
+        "confidence": 0.30000000000000004,
+        "text_sample": "Tesla faces mixed market sentiment as EV competition intensifies. While vehicle deliveries met targe..."
+      },
+      "document": {
+        "summary": "Tesla Inc. financial results show revenue growth but margin compression. The company delivered 1.8 million vehicles globally with expanding production capacity.",
+        "quality_score": 0.3,
+        "key_insights": [
+          "Revenue/sales performance highlighted",
+          "Growth trends identified"
+        ],
+        "document_length": 335
+      },
+      "risk": {
+        "risk_score": 0.75,
+        "risk_level": "low",
+        "risk_factors": [
+          "Standard business risks"
+        ]
+      }
+    },
+    "processing_time": 0.0,
+    "timestamp": "2025-12-14 20:16:40"
+  },
+  "Microsoft Corporation": {
+    "company": "Microsoft Corporation",
+    "overall_score": 0.677,
+    "recommendation": "HOLD",
+    "narrative": "\u2705 POSITIVE OUTLOOK: Microsoft Corporation demonstrates solid fundamentals with strongly positive market reception, adequate business metrics, and low-risk risk management. Revenue/sales performance highlighted. Growth trends identified",
+    "components": {
+      "sentiment": {
+        "score": 0.9,
+        "label": "positive",
+        "confidence": 0.9,
+        "text_sample": "Microsoft announces strong cloud growth with Azure revenue up 27% year-over-year. AI integration acr..."
+      },
+      "document": {
+        "summary": "Microsoft Corporation reports excellent financial metrics with consistent revenue growth across all segments. Azure cloud platform demonstrates strong competitive position with enterprise customers. The company maintains healthy operating margins of 42% and strong cash generation capabilities.",
+        "quality_score": 0.3,
+        "key_insights": [
+          "Revenue/sales performance highlighted",
+          "Growth trends identified"
+        ],
+        "document_length": 364
+      },
+      "risk": {
+        "risk_score": 0.85,
+        "risk_level": "low",
+        "risk_factors": [
+          "Standard business risks"
+        ]
+      }
+    },
+    "processing_time": 0.0,
+    "timestamp": "2025-12-14 20:16:40"
+  },
+  "Amazon.com Inc.": {
+    "company": "Amazon.com Inc.",
+    "overall_score": 0.578,
+    "recommendation": "WEAK HOLD",
+    "narrative": "\u2696\ufe0f HOLD/NEUTRAL: Amazon.com Inc. presents a balanced investment profile with strongly positive market sentiment, concerning financial position, and low-risk risk factors. Revenue/sales performance highlighted",
+    "components": {
+      "sentiment": {
+        "score": 0.8,
+        "label": "positive",
+        "confidence": 0.8,
+        "text_sample": "Amazon shows resilient performance despite economic headwinds. E-commerce growth stabilizing while A..."
+      },
+      "document": {
+        "summary": "Amazon.com Inc. delivers solid financial results with diversified revenue streams. AWS contributes significant operating income with high margins.",
+        "quality_score": 0.2,
+        "key_insights": [
+          "Revenue/sales performance highlighted"
+        ],
+        "document_length": 337
+      },
+      "risk": {
+        "risk_score": 0.75,
+        "risk_level": "low",
+        "risk_factors": [
+          "Standard business risks"
+        ]
+      }
+    },
+    "processing_time": 0.0,
+    "timestamp": "2025-12-14 20:16:40"
+  },
+  "Meta Platforms Inc.": {
+    "company": "Meta Platforms Inc.",
+    "overall_score": 0.535,
+    "recommendation": "WEAK HOLD",
+    "narrative": "\u2696\ufe0f HOLD/NEUTRAL: Meta Platforms Inc. presents a balanced investment profile with strongly positive market sentiment, adequate financial position, and moderate-risk risk factors. Revenue/sales performance highlighted",
+    "components": {
+      "sentiment": {
+        "score": 0.7,
+        "label": "positive",
+        "confidence": 0.7,
+        "text_sample": "Meta faces regulatory scrutiny and user engagement challenges across social platforms. Metaverse inv..."
+      },
+      "document": {
+        "summary": "Meta Platforms Inc. reports mixed financial performance with advertising revenue pressure. The company reduces workforce and operational expenses to improve margins.",
+        "quality_score": 0.3,
+        "key_insights": [
+          "Revenue/sales performance highlighted"
+        ],
+        "document_length": 322
+      },
+      "risk": {
+        "risk_score": 0.6,
+        "risk_level": "medium",
+        "risk_factors": [
+          "Standard business risks"
+        ]
+      }
+    },
+    "processing_time": 0.0,
+    "timestamp": "2025-12-14 20:16:40"
+  }
+}

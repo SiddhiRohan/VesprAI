@@ -1,0 +1,22 @@
+{
+  "Apple Inc.": {
+    "news": "Apple reported strong quarterly earnings with iPhone sales exceeding expectations. The company beat analyst estimates with revenue growth of 8% year-over-year. New product launches and services growth continue to drive positive momentum. CEO Tim Cook expressed optimism about future prospects and innovation pipeline.",
+    "document": "Apple Inc. demonstrates solid financial performance with revenue of $394.3 billion and net income of $99.8 billion. The company maintains strong cash position of $165 billion and continues strategic investments in R&D. iPhone segment remains the largest revenue driver with 70% gross margins. Services business shows consistent growth with high-margin recurring revenue streams."
+  },
+  "Tesla Inc.": {
+    "news": "Tesla faces mixed market sentiment as EV competition intensifies. While vehicle deliveries met targets, profit margins declined due to price cuts. Investors remain divided on the company's autonomous driving timeline and market share protection. Stock volatility continues amid broader market concerns.",
+    "document": "Tesla Inc. financial results show revenue growth but margin compression. The company delivered 1.8 million vehicles globally with expanding production capacity. Significant investments in battery technology and manufacturing automation continue. Regulatory challenges and competitive pressures present ongoing risks to market position."
+  },
+  "Microsoft Corporation": {
+    "news": "Microsoft announces strong cloud growth with Azure revenue up 27% year-over-year. AI integration across products driving customer adoption and pricing power. The company benefits from digital transformation trends and hybrid work environments. Leadership position in enterprise software continues to strengthen.",
+    "document": "Microsoft Corporation reports excellent financial metrics with consistent revenue growth across all segments. Azure cloud platform demonstrates strong competitive position with enterprise customers. The company maintains healthy operating margins of 42% and strong cash generation capabilities. Strategic AI investments positioning for future growth opportunities."
+  },
+  "Amazon.com Inc.": {
+    "news": "Amazon shows resilient performance despite economic headwinds. E-commerce growth stabilizing while AWS cloud services maintain strong momentum. The company focuses on cost optimization and operational efficiency improvements. Advertising business emerges as high-margin growth driver.",
+    "document": "Amazon.com Inc. delivers solid financial results with diversified revenue streams. AWS contributes significant operating income with high margins. E-commerce operations show efficiency improvements and market share stability. The company invests heavily in logistics infrastructure and technology capabilities for competitive advantages."
+  },
+  "Meta Platforms Inc.": {
+    "news": "Meta faces regulatory scrutiny and user engagement challenges across social platforms. Metaverse investments continue with unclear return timeline. Cost reduction efforts aim to improve profitability metrics. Digital advertising market remains competitive with privacy regulation impacts.",
+    "document": "Meta Platforms Inc. reports mixed financial performance with advertising revenue pressure. The company reduces workforce and operational expenses to improve margins. Significant R&D investments in virtual reality and AI technologies. User engagement metrics show stabilization after recent declines across major platforms."
+  }
+}

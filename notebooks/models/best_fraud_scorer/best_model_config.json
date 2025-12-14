@@ -1,0 +1,6 @@
+{
+  "best_model": "hybrid_supervised",
+  "performance": 0.9562530399702441,
+  "model_type": "LogisticRegression",
+  "features": "text_embeddings + numeric_features"
+}

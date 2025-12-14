@@ -1,0 +1,9 @@
+{
+  "model_name": "all-MiniLM-L6-v2",
+  "contamination": 0.001,
+  "n_estimators": 300,
+  "approach": "nlp_only_unsupervised",
+  "dataset": "PaySim_local",
+  "teammate_benchmark": 0.5718,
+  "expected_auc_range": "0.55-0.65"
+}
