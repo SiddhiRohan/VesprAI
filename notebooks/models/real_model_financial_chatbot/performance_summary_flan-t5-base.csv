@@ -1,0 +1,6 @@
+category,query,response,intent,processing_time,relevant_docs_count,model_loaded,response_length,topics_covered,topics_total
+Investment Analysis,What's the current sentiment around Tesla stock and should I consider investing?,"I understand you're asking about financial matters. Could you please provide more specific details about what you'd like to know? I can help with investment analysis, risk assessment, financial planning, and market insights.",sentiment,0.31,2,True,224,2,4
+Fundamental Analysis,Explain the key financial ratios I should look at when analyzing Apple's performance,"strong profit margins, significant cash reserves, and consistent revenue growth from diverse product lines",analysis,0.43,1,True,106,0,4
+Risk Management,What are the main risk factors I should consider in current market conditions?,"market volatility, economic cycles, inflation, interest rate changes, and geopolitical events",risk,0.41,1,True,93,1,4
+Market Sentiment,How does sentiment analysis help in making investment decisions?,This information can provide insights into potential market movements and investor behavior,sentiment,0.34,1,True,91,0,4
+Fraud Detection,What fraud detection patterns should I watch for in financial transactions?,"risk management, risk management, and financial planning",analysis,0.36,0,True,56,0,4

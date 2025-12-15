@@ -1,0 +1,199 @@
+{
+  "session_info": {
+    "timestamp": "2025-12-14T19:11:38.447366",
+    "selected_model": "flan-t5-base",
+    "model_load_time": 19.920464992523193,
+    "total_queries_processed": 5,
+    "system_capabilities": {
+      "cuda_available": false,
+      "gpu_name": null,
+      "transformers_available": true
+    }
+  },
+  "conversation_history": [
+    {
+      "role": "user",
+      "content": "I'm a 30-year-old professional interested in building a diversified investment portfolio. Where should I start?",
+      "timestamp": "19:05:44",
+      "intent": null
+    },
+    {
+      "role": "assistant",
+      "content": "investment strategies, market analysis, risk management, and financial planning",
+      "timestamp": "19:05:45",
+      "intent": "investment"
+    },
+    {
+      "role": "user",
+      "content": "You mentioned diversification. Can you explain specifically how to diversify across different asset classes?",
+      "timestamp": "19:05:46",
+      "intent": null
+    },
+    {
+      "role": "assistant",
+      "content": "Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diversification is the process of diversifying assets across different asset classes. Diver.",
+      "timestamp": "19:05:54",
+      "intent": "general"
+    },
+    {
+      "role": "user",
+      "content": "What about international diversification? Should I invest in international markets?",
+      "timestamp": "19:05:55",
+      "intent": null
+    },
+    {
+      "role": "assistant",
+      "content": "Is it a good idea to invest in a foreign country?",
+      "timestamp": "19:05:56",
+      "intent": "investment"
+    },
+    {
+      "role": "user",
+      "content": "I'm particularly interested in technology stocks. What should I consider when investing in tech companies?",
+      "timestamp": "19:05:57",
+      "intent": null
+    },
+    {
+      "role": "assistant",
+      "content": "investment strategies, market analysis, risk management, and financial planning",
+      "timestamp": "19:05:57",
+      "intent": "investment"
+    },
+    {
+      "role": "user",
+      "content": "Based on our conversation, what would be your top 3 recommendations for someone in my situation?",
+      "timestamp": "19:05:58",
+      "intent": null
+    },
+    {
+      "role": "assistant",
+      "content": "I think you are a good fit for this position.",
+      "timestamp": "19:05:58",
+      "intent": "investment"
+    },
+    {
+      "role": "user",
+      "content": "Hi! I am new to investing, which stocks do u think i should invest in?",
+      "timestamp": "19:07:09",
+      "intent": null
+    },
+    {
+      "role": "assistant",
+      "content": "Stocks with a high risk profile.",
+      "timestamp": "19:07:09",
+      "intent": "investment"
+    },
+    {
+      "role": "user",
+      "content": "Can you name a few? and why?",
+      "timestamp": "19:07:31",
+      "intent": null
+    },
+    {
+      "role": "assistant",
+      "content": "investment strategies, market analysis, risk management, and financial planning",
+      "timestamp": "19:07:31",
+      "intent": "general"
+    }
+  ],
+  "system_info": {
+    "model_type": "flan-t5-base",
+    "model_config": {
+      "model_name": "google/flan-t5-base",
+      "max_new_tokens": 256,
+      "temperature": 0.7,
+      "do_sample": false,
+      "description": "FLAN-T5 instruction-following model",
+      "type": "instruction_following",
+      "requires_gpu": false
+    },
+    "model_loaded": true,
+    "knowledge_base_docs": 4,
+    "conversation_length": 14,
+    "transformers_available": true,
+    "cuda_available": false,
+    "memory_window": 10,
+    "uses_real_models": true,
+    "api_calls_disabled": true
+  },
+  "model_config": {
+    "model_name": "google/flan-t5-base",
+    "max_new_tokens": 256,
+    "temperature": 0.7,
+    "do_sample": false,
+    "description": "FLAN-T5 instruction-following model",
+    "type": "instruction_following",
+    "requires_gpu": false
+  },
+  "performance_results": [
+    {
+      "category": "Investment Analysis",
+      "query": "What's the current sentiment around Tesla stock and should I consider investing?",
+      "response": "I understand you're asking about financial matters. Could you please provide more specific details about what you'd like to know? I can help with investment analysis, risk assessment, financial planning, and market insights.",
+      "intent": "sentiment",
+      "processing_time": 0.31,
+      "relevant_docs_count": 2,
+      "model_loaded": true,
+      "response_length": 224,
+      "topics_covered": 2,
+      "topics_total": 4
+    },
+    {
+      "category": "Fundamental Analysis",
+      "query": "Explain the key financial ratios I should look at when analyzing Apple's performance",
+      "response": "strong profit margins, significant cash reserves, and consistent revenue growth from diverse product lines",
+      "intent": "analysis",
+      "processing_time": 0.43,
+      "relevant_docs_count": 1,
+      "model_loaded": true,
+      "response_length": 106,
+      "topics_covered": 0,
+      "topics_total": 4
+    },
+    {
+      "category": "Risk Management",
+      "query": "What are the main risk factors I should consider in current market conditions?",
+      "response": "market volatility, economic cycles, inflation, interest rate changes, and geopolitical events",
+      "intent": "risk",
+      "processing_time": 0.41,
+      "relevant_docs_count": 1,
+      "model_loaded": true,
+      "response_length": 93,
+      "topics_covered": 1,
+      "topics_total": 4
+    },
+    {
+      "category": "Market Sentiment",
+      "query": "How does sentiment analysis help in making investment decisions?",
+      "response": "This information can provide insights into potential market movements and investor behavior",
+      "intent": "sentiment",
+      "processing_time": 0.34,
+      "relevant_docs_count": 1,
+      "model_loaded": true,
+      "response_length": 91,
+      "topics_covered": 0,
+      "topics_total": 4
+    },
+    {
+      "category": "Fraud Detection",
+      "query": "What fraud detection patterns should I watch for in financial transactions?",
+      "response": "risk management, risk management, and financial planning",
+      "intent": "analysis",
+      "processing_time": 0.36,
+      "relevant_docs_count": 0,
+      "model_loaded": true,
+      "response_length": 56,
+      "topics_covered": 0,
+      "topics_total": 4
+    }
+  ],
+  "knowledge_base_stats": {
+    "total_documents": 4,
+    "document_topics": [
+      "company_profile",
+      "company_profile",
+      "risk_management",
+      "sentiment_analysis"
+    ]
+  }
+}

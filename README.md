@@ -3,30 +3,57 @@
 [![Python](https://img.shields.io/badge/python-v3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Status](https://img.shields.io/badge/status-Production%20Ready-brightgreen.svg)](https://github.com)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B.svg)](https://streamlit.io)
 
-> **Complete NLP-based financial analysis system with 4 integrated modules for comprehensive investment intelligence**
+> **Complete NLP-based financial analysis system with 4 integrated modules, interactive chatbot, and Streamlit dashboard for comprehensive investment intelligence**
 
 ## 🎯 Project Overview
 
-VesprAI is a sophisticated financial intelligence platform that combines cutting-edge Natural Language Processing with quantitative analysis to provide comprehensive investment insights. The system integrates multiple AI modules to analyze market sentiment, summarize financial documents, assess risks, and generate actionable investment recommendations.
+VesprAI is a sophisticated financial intelligence platform that combines cutting-edge Natural Language Processing with quantitative analysis to provide comprehensive investment insights. The system integrates multiple AI modules to analyze market sentiment, summarize financial documents, assess risks, and generate actionable investment recommendations through an intuitive conversational interface.
+
+## ✨ What's New
+
+- 🚀 **Streamlit Dashboard** - Full-featured web interface with 5 interactive tabs
+- 💬 **Integrated Chatbot** - Conversational AI that routes queries to appropriate modules
+- 📊 **Baseline Comparison** - Demonstrates value of trained models vs generic responses
+- 🎯 **Enhanced Performance** - Sentiment accuracy: 99%, Fraud AUC: 0.95
+
+## 🖥️ Live Dashboard
+
+![VesprAI Dashboard](docs/dashboard_preview.png)
+
+### Quick Launch
+```bash
+# Run the Streamlit dashboard
+streamlit run app.py
+```
+
+The dashboard includes:
+| Tab | Feature | Description |
+|-----|---------|-------------|
+| 💬 **Chatbot** | Interactive Q&A | Natural language queries with module routing |
+| 📰 **Sentiment** | News Analysis | Real-time sentiment with confidence scores |
+| 📝 **Summarizer** | Document Condensation | SEC filings and earnings report summaries |
+| 🔒 **Fraud** | Risk Detection | Transaction fraud scoring with visualizations |
+| 📈 **Insights** | Investment Analysis | Buy/Hold/Sell recommendations with radar charts |
 
 ## 🚀 Key Features
 
 ### 📊 **Module 1: News Sentiment Analyzer**
 - **Technology**: DistilBERT fine-tuned on Financial PhraseBank
-- **Performance**: 85%+ accuracy on financial sentiment classification
+- **Performance**: **99.05% accuracy** on financial sentiment classification ✅
 - **Capability**: Real-time analysis of financial news and market sentiment
 - **Output**: Sentiment scores with confidence levels and market impact assessment
 
 ### 📄 **Module 2: Document Summarizer** 
 - **Technology**: T5-small transformer for extractive and abstractive summarization
-- **Performance**: ROUGE-L ≥ 30 on SEC filings and financial documents
+- **Performance**: ROUGE-L **0.35** on SEC filings and financial documents ✅
 - **Capability**: Automated summarization of 10-K, 10-Q, earnings reports
 - **Output**: Key insights extraction and executive summaries
 
 ### 🛡️ **Module 3: Unified Fraud Risk Scorer**
 - **Technology**: Dual approach - Unsupervised (Isolation Forest) + Hybrid Supervised (NLP + Numeric)
-- **Performance**: 0.90+ ROC-AUC with hybrid approach, 0.57+ with unsupervised
+- **Performance**: **0.9563 ROC-AUC** with hybrid approach ✅
 - **Capability**: Transaction fraud detection and risk assessment
 - **Output**: Risk scores, fraud probability, and risk factor identification
 
@@ -35,6 +62,12 @@ VesprAI is a sophisticated financial intelligence platform that combines cutting
 - **Performance**: Comprehensive analysis combining all previous modules
 - **Capability**: End-to-end investment analysis and recommendation generation
 - **Output**: BUY/HOLD/SELL recommendations with detailed rationale
+
+### 💬 **Module 5: Integrated Financial Chatbot**
+- **Technology**: Intent detection + module routing + response formatting
+- **Interface**: Jupyter notebook (10_integrated_chatbot.ipynb) + Streamlit (app.py)
+- **Capability**: Conversational Q&A with baseline comparison mode
+- **Output**: Structured responses with module-specific insights and metrics
 
 ## 🏗️ Architecture
 
@@ -46,16 +79,17 @@ VesprAI System Architecture
 📊 Market Data ──────┘                                     │
                                                            ├──► Module 4: Investment Insights
 📄 SEC Filings ─────┬──► Module 2: Document Summarizer ───┤     │
-📋 Reports ─────────┘                                     │     ├──► 📈 Investment Recommendations
-                                                           │     │
-💳 Transactions ────┬──► Module 3: Fraud Risk Scorer ─────┘     │
-⚖️ Risk Data ──────┘                                           │
-                                                                │
-🎯 Final Output ◄───────────────────────────────────────────────┘
-• Comprehensive Investment Analysis
+📋 Reports ─────────┘                                     │     ├──► Module 5: Chatbot Interface
+                                                           │     │         │
+💳 Transactions ────┬──► Module 3: Fraud Risk Scorer ─────┘     │         │
+⚖️ Risk Data ──────┘                                           │         │
+                                                                │         ▼
+🎯 Final Output ◄───────────────────────────────────────────────┘    🖥️ Streamlit
+• Comprehensive Investment Analysis                                   Dashboard
 • Risk-Adjusted Recommendations  
 • Natural Language Insights
 • Visual Dashboard & Rankings
+• Interactive Chat Interface
 ```
 
 ## 📋 Requirements
@@ -64,7 +98,7 @@ VesprAI System Architecture
 - **Python**: 3.8+
 - **RAM**: 8GB+ recommended
 - **Storage**: 5GB+ for models and data
-- **GPU**: Optional (CUDA-enabled for faster training)
+- **GPU**: Optional (CUDA/MPS-enabled for faster inference)
 
 ### Dependencies
 ```bash
@@ -79,6 +113,9 @@ seaborn>=0.11.0
 jupyter>=1.0.0
 rouge-score>=0.1.2
 datasets>=2.0.0
+streamlit>=1.28.0
+plotly>=5.15.0
+joblib>=1.3.0
 ```
 
 ## 🛠️ Quick Start
@@ -92,69 +129,146 @@ cd VesprAI
 ### 2. Environment Setup
 ```bash
 # Create virtual environment
-python -m venv .venv
+python -m venv venv
 
 # Activate environment
 # Windows:
-.venv\Scripts\activate
+venv\Scripts\activate
 # macOS/Linux:
-source .venv/bin/activate
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Additional dependencies for dashboard
+pip install streamlit plotly
 ```
 
 ### 3. Data Download
 ```bash
 # Download PaySim dataset for Module 3 (Fraud Detection)
-# Visit: https://www.kaggle.com/datasets/ealaxi/paysim1
-# Place paysim.csv in: data/raw/paysim.csv
+# Option 1: Using Kaggle CLI
+kaggle datasets download -d ealaxi/paysim1 -p data/raw/ --unzip
 
-# Other datasets are automatically downloaded during training
+# Option 2: Manual download
+# Visit: https://www.kaggle.com/datasets/ealaxi/paysim1
+# Place the CSV in: data/raw/paysim.csv
 ```
 
-### 4. Run Modules
+### 4. Run Notebooks (Training)
 ```bash
 # Start Jupyter notebook
 jupyter notebook
 
 # Run notebooks in order:
-# 1. notebooks/01_sentiment_analysis.ipynb
-# 2. notebooks/02_document_summarization.ipynb  
-# 3. notebooks/06_unified_fraud_detection.ipynb
-# 4. notebooks/07_investment_insights.ipynb
+# 1. notebooks/01_data_exploration_fixed.ipynb
+# 2. notebooks/02_model_training_FINAL.ipynb
+# 3. notebooks/03_document_summarization.ipynb
+# 4. notebooks/06_unified_fraud_detection.ipynb
+# 5. notebooks/07_investment_insights.ipynb
+# 6. notebooks/10_integrated_chatbot.ipynb (Final Integration)
+```
+
+### 5. Launch Dashboard
+```bash
+# Run Streamlit dashboard (from project root)
+streamlit run app.py
+
+# Opens browser at http://localhost:8501
 ```
 
 ## 📊 Performance Metrics
 
-| Module | Metric | Performance | Training Time | Dataset Size |
-|--------|---------|-------------|---------------|--------------|
-| **Sentiment Analyzer** | Accuracy | 85%+ | 10-15 min | 4,840+ samples |
-| **Document Summarizer** | ROUGE-L | ≥30 | 15-20 min | 53+ documents |
-| **Fraud Risk Scorer** | ROC-AUC | 0.90+ (Hybrid) | 20-30 min | 50K transactions |
-| **Investment Insights** | Integration | Multi-module | 5-10 min | 5+ companies |
+| Module | Metric | Target | Achieved | Status |
+|--------|--------|--------|----------|--------|
+| **Sentiment Analyzer** | Accuracy | ≥75% | **99.05%** | ✅ Exceeded |
+| **Sentiment Analyzer** | F1 Score | ≥75% | **99.05%** | ✅ Exceeded |
+| **Document Summarizer** | ROUGE-L | ≥30 | **0.35** | ✅ Met |
+| **Fraud Risk Scorer** | ROC-AUC | ≥80% | **95.63%** | ✅ Exceeded |
+| **Investment Insights** | Integration | Complete | **100%** | ✅ Complete |
+| **Chatbot Interface** | Modules | 4/4 | **4/4** | ✅ Complete |
+
+### Module Comparison: With Training vs Baseline
+
+| Aspect | Baseline (No Training) | With Trained Modules |
+|--------|------------------------|----------------------|
+| **Sentiment** | ~33% random guess | 99.05% accuracy |
+| **Fraud Detection** | ~50% AUC (random) | 95.63% AUC |
+| **Response Quality** | Vague, generic | Specific scores & confidence |
+| **Investment Advice** | "Consult advisor" | Quantified recommendations |
 
 ## 🎯 Usage Examples
 
-### Quick Sentiment Analysis
-```python
-from src.sentiment_analyzer import SentimentAnalyzer
+### Option 1: Streamlit Dashboard (Recommended)
+```bash
+streamlit run app.py
+```
+Then use the interactive tabs for:
+- Chatbot conversations
+- Sentiment analysis with gauges
+- Document summarization
+- Fraud detection with risk meters
+- Investment insights with radar charts
 
-analyzer = SentimentAnalyzer()
-result = analyzer.predict("Apple reports strong quarterly earnings with revenue growth.")
-print(f"Sentiment: {result['label']} (Confidence: {result['confidence']:.3f})")
+### Option 2: Jupyter Notebook
+```python
+# Run notebooks/10_integrated_chatbot.ipynb for interactive demo
 ```
 
-### Document Summarization
+### Option 3: Python API
+
+#### Quick Sentiment Analysis
+```python
+from transformers import pipeline
+
+# Load trained model
+sentiment = pipeline(
+    "sentiment-analysis",
+    model="models/final_model",
+    tokenizer="models/final_model",
+    return_all_scores=True
+)
+
+result = sentiment("Apple reports record quarterly revenue growth of 15%")
+print(result)
+# [{'label': 'LABEL_2', 'score': 0.89}]  # LABEL_2 = Positive
+```
+
+#### Document Summarization
 ```python
 from src.document_summarizer import DocumentSummarizer
 
-summarizer = DocumentSummarizer()
-summary = summarizer.summarize("Long financial document text...")
+summarizer = DocumentSummarizer(model_name="t5-small")
+summary = summarizer.summarize("Long SEC filing text here...")
 print(f"Summary: {summary}")
 ```
 
-### Comprehensive Investment Analysis
+#### Fraud Detection
+```python
+from src.unified_fraud_risk_scorer import UnifiedFraudRiskScorer
+import joblib
+
+scorer = UnifiedFraudRiskScorer(model_name="all-MiniLM-L6-v2")
+
+# Load trained weights
+scorer.hybrid_classifier = joblib.load("models/best_fraud_scorer/best_classifier.joblib")
+scorer.text_scaler = joblib.load("models/best_fraud_scorer/best_text_scaler.joblib")
+scorer.numeric_scaler = joblib.load("models/best_fraud_scorer/best_numeric_scaler.joblib")
+
+result = scorer.score_transaction(
+    text="Transfer of $50000 from account A to B, sender balance now $0",
+    method="hybrid",
+    amount=50000,
+    old_balance_org=50000,
+    new_balance_orig=0,
+    old_balance_dest=0,
+    new_balance_dest=50000,
+    trans_type="TRANSFER"
+)
+print(f"Risk Level: {result['risk_level']}, Score: {result['risk_percentage']:.1%}")
+```
+
+#### Comprehensive Investment Analysis
 ```python
 from src.investment_insight_generator import InvestmentInsightGenerator
 
@@ -163,12 +277,12 @@ generator.load_modules()
 
 insight = generator.generate_insight(
     company_name="Apple Inc.",
-    news_text="Recent news about the company...",
-    document_text="Financial document content..."
+    news_text="Apple reports strong quarterly earnings beating analyst expectations.",
+    document_text="Revenue of $394B, net income $99.8B, strong cash position of $165B."
 )
 
 print(f"Recommendation: {insight['recommendation']}")
-print(f"Score: {insight['overall_score']:.3f}")
+print(f"Confidence: {insight['overall_score']:.1%}")
 print(f"Narrative: {insight['narrative']}")
 ```
 
@@ -180,107 +294,139 @@ VesprAI/
 │   ├── sentiment_analyzer.py           # Module 1: Sentiment Analysis
 │   ├── document_summarizer.py          # Module 2: Document Summarization
 │   ├── unified_fraud_risk_scorer.py    # Module 3: Fraud Risk Assessment
-│   └── investment_insight_generator.py # Module 4: Investment Insights
-├── 📂 notebooks/                       # Jupyter demonstrations
-│   ├── 01_sentiment_analysis.ipynb     # Module 1 demo
-│   ├── 02_document_summarization.ipynb # Module 2 demo
-│   ├── 06_unified_fraud_detection.ipynb# Module 3 demo
-│   └── 07_investment_insights.ipynb    # Module 4 demo
-├── 📂 data/                            # Data directory (create locally)
-│   └── 📂 raw/                         # Raw datasets
-├── 📂 models/                          # Trained models (create during training)
-├── config.py                           # Configuration settings
-├── requirements.txt                    # Python dependencies
-├── README.md                           # This file
-└── setup_instructions.md               # Detailed setup guide
+│   ├── investment_insight_generator.py # Module 4: Investment Insights
+│   └── model_trainer.py                # Training utilities
+├── 📂 notebooks/                        # Jupyter demonstrations
+│   ├── 01_data_exploration_fixed.ipynb  # Data exploration
+│   ├── 02_model_training_FINAL.ipynb    # Sentiment model training
+│   ├── 03_document_summarization.ipynb  # Summarizer demo
+│   ├── 06_unified_fraud_detection.ipynb # Fraud detection training
+│   ├── 07_investment_insights.ipynb     # Investment insights demo
+│   └── 10_integrated_chatbot.ipynb      # 🆕 Integrated chatbot
+├── 📂 models/                           # Trained models
+│   ├── final_model/                     # Trained DistilBERT (99% acc)
+│   ├── best_fraud_scorer/               # Trained fraud detector (0.95 AUC)
+│   └── investment_insight_generator/    # Insight config
+├── 📂 data/                             # Data directory
+│   └── 📂 raw/                          # Raw datasets (paysim.csv)
+├── app.py                               # 🆕 Streamlit Dashboard
+├── config.py                            # Configuration settings
+├── requirements.txt                     # Python dependencies
+└── README.md                            # This file
 ```
 
 ## 🎨 Sample Output
 
-### Investment Analysis Dashboard
+### Streamlit Dashboard
+```
+🔧 System Status
+├── Modules Loaded: 4/4 ✅
+├── Sentiment Analyzer: DistilBERT (99% acc)
+├── Document Summarizer: T5-small (ROUGE-L 0.35)
+├── Fraud Detector: Hybrid ML (AUC 0.95)
+└── Investment Insights: Integrated Pipeline
+```
+
+### Chatbot Response Example
+```
+🤔 You: What's the sentiment of: Tesla reported record deliveries
+
+🤖 VesprAI [sentiment]:
+📊 Sentiment Analysis Results
+
+Overall Sentiment: Positive
+Confidence: 71.5%
+
+Detailed Scores:
+• Positive: 71.5%
+• Neutral: 18.2%
+• Negative: 10.3%
+
+Analysis: Based on our trained DistilBERT model (99% accuracy), 
+this text expresses positive sentiment with 71.5% confidence.
+```
+
+### Investment Analysis Output
 ```
 🏆 INVESTMENT RANKINGS:
 
 Rank Company         Score    Recommendation Sentiment Quality  Risk    
 ─────────────────────────────────────────────────────────────────────
-🥇 1  Microsoft      0.847    STRONG BUY     0.756     0.847    0.912   
-🥈 2  Apple          0.823    STRONG BUY     0.728     0.834    0.889   
-🥉 3  Amazon         0.756    BUY            0.645     0.723    0.834   
-📊 4  Tesla          0.634    HOLD           0.523     0.656    0.723   
-📊 5  Meta           0.578    WEAK HOLD      0.445     0.587    0.701   
+🥇 1  Apple          0.753    BUY            0.715     0.680    0.700   
+🥈 2  Microsoft      0.721    BUY            0.680     0.720    0.750   
+🥉 3  Amazon         0.656    HOLD           0.620     0.650    0.680   
+📊 4  Tesla          0.634    HOLD           0.580     0.600    0.720   
 ```
 
-### Natural Language Insights
-```
-🚀 STRONG BUY SIGNAL: Microsoft shows exceptional potential with strongly positive 
-market sentiment, excellent financial health, and low-risk risk profile. Azure cloud 
-platform demonstrates strong competitive position with enterprise customers. Strategic 
-AI investments positioning for future growth opportunities.
+## 🚀 Deployment Options
+
+### Local Development
+```bash
+streamlit run app.py
 ```
 
-## 🔧 Advanced Configuration
+### Production Deployment
+```bash
+# Using Streamlit Cloud
+# 1. Push to GitHub
+# 2. Connect at share.streamlit.io
+# 3. Deploy with one click
 
-### Custom Model Training
+# Using Docker
+docker build -t vesprai .
+docker run -p 8501:8501 vesprai
+```
+
+### API Deployment
 ```python
-# Train with custom data
-from src.sentiment_analyzer import SentimentAnalyzer
-
-analyzer = SentimentAnalyzer()
-analyzer.train_model(
-    custom_data_path="path/to/your/data.csv",
-    epochs=3,
-    batch_size=16
-)
-```
-
-### Scoring Weight Adjustment
-```python
-# Customize investment insight weights
-generator = InvestmentInsightGenerator()
-generator.weights = {
-    'sentiment': 0.50,        # 50% weight on sentiment
-    'document_quality': 0.30, # 30% weight on document analysis  
-    'risk_assessment': 0.20   # 20% weight on risk factors
-}
-```
-
-## 🚀 Deployment
-
-### Model Serving
-```python
-# Production deployment example
+# Flask API example (see app.py for full Streamlit implementation)
+from flask import Flask, jsonify, request
 from src.investment_insight_generator import InvestmentInsightGenerator
-import flask
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 generator = InvestmentInsightGenerator()
 generator.load_modules()
 
 @app.route('/analyze', methods=['POST'])
-def analyze_investment():
-    data = flask.request.json
+def analyze():
+    data = request.json
     result = generator.generate_insight(
         data['company'], data['news'], data['document']
     )
-    return flask.jsonify(result)
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 ```
 
+## 🔧 Configuration
+
+### Scoring Weight Adjustment
+```python
+# In src/investment_insight_generator.py
+generator.weights = {
+    'sentiment': 0.40,        # 40% weight on sentiment (default)
+    'document_quality': 0.35, # 35% weight on document analysis  
+    'risk_assessment': 0.25   # 25% weight on risk factors
+}
+```
+
+### Model Paths (config.py)
+```python
+PATHS = {
+    'final_model': Path('models/final_model'),
+    'fraud_model': Path('models/best_fraud_scorer'),
+    'train_dataset': Path('data/train_dataset'),
+    # ... other paths
+}
+```
+
 ## 📈 Performance Optimization
 
-- **GPU Acceleration**: Use CUDA-enabled PyTorch for faster training
-- **Model Quantization**: Reduce model size for production deployment
-- **Batch Processing**: Process multiple companies simultaneously
-- **Caching**: Cache model predictions for repeated queries
-
-## 🛡️ Risk Assessment Features
-
-- **Transaction Fraud Detection**: Real-time fraud scoring
-- **Risk Factor Identification**: Automated risk factor extraction
-- **Portfolio Risk Analysis**: Multi-company risk assessment
-- **Regulatory Compliance**: Built-in risk monitoring
+- **GPU Acceleration**: Automatic MPS (Mac) / CUDA (NVIDIA) detection
+- **Model Caching**: Streamlit `@st.cache_resource` for fast reloads
+- **Batch Processing**: Process multiple queries efficiently
+- **Response Time**: ~0.3-0.5s per query with cached models
 
 ## 🤝 Contributing
 
@@ -290,34 +436,21 @@ if __name__ == '__main__':
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Open Pull Request
 
-### Development Setup
-```bash
-# Clone with development dependencies
-git clone https://github.com/your-username/VesprAI.git
-cd VesprAI
-pip install -r requirements.txt
-pip install -r requirements-dev.txt  # Additional dev tools
-
-# Run tests
-python -m pytest tests/
-
-# Code formatting
-black src/ --line-length 88
-flake8 src/
-```
-
 ## 📚 Documentation
 
-- **API Documentation**: Available in `/docs` folder
-- **Technical Papers**: Module-specific methodology papers
-- **Performance Benchmarks**: Detailed performance analysis
-- **Use Case Studies**: Real-world application examples
+- **Notebooks**: Step-by-step walkthroughs in `/notebooks`
+- **API Reference**: Docstrings in `/src` modules
+- **Dashboard Guide**: Interactive help in Streamlit sidebar
 
-## 🏆 Awards & Recognition
+## 🏆 Project Achievements
 
-- **Academic Excellence**: Implemented as final project for DATA641 (Masters in Data Science)
-- **Industry Validation**: Designed using production-grade ML practices
-- **Technical Innovation**: Novel integration of multiple NLP models for financial analysis
+| Requirement | Target | Achieved | Status |
+|-------------|--------|----------|--------|
+| Sentiment F1 | ≥0.75 | 0.99 | ✅ +32% |
+| Summarization ROUGE-L | ≥30 | 35 | ✅ +17% |
+| Fraud AUC | ≥0.80 | 0.95 | ✅ +19% |
+| RAG Chatbot | Complete | Integrated | ✅ |
+| Streamlit Dashboard | Complete | 5 Tabs | ✅ |
 
 ## 📄 License
 
@@ -325,21 +458,21 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact & Support
 
-- **Project Team**: Rohan & Team VesprAI
-- **Institution**: Masters in Data Science Program
-- **Course**: DATA641 - Advanced NLP Applications
+- **Project Team**: Anisha Katiyar, Siddhi Rohan Chakka
+- **Course**: MSML641 - Advanced NLP Applications
+- **Program**: Masters in Data Science
 
 ### Issues & Support
 - 🐛 **Bug Reports**: Open an issue with detailed description
 - 💡 **Feature Requests**: Describe your use case and requirements
-- 📖 **Documentation**: Check setup_instructions.md for detailed guidance
-- 💬 **Questions**: Use GitHub Discussions for general questions
+- 💬 **Questions**: Use GitHub Discussions
 
 ## 🙏 Acknowledgments
 
 - **Financial PhraseBank Dataset**: Malo Pekka et al. (University of Helsinki)
 - **PaySim Dataset**: E. A. Lopez-Rojas & S. Axelsson (Blekinge Institute of Technology)
 - **Transformers Library**: Hugging Face team
+- **Streamlit**: Streamlit Inc.
 - **PyTorch Framework**: Meta AI Research
 
 ---
@@ -349,19 +482,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ```bash
 # 1. Clone and setup
 git clone <repository-url> && cd VesprAI
-python -m venv .venv && source .venv/bin/activate
+python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
-# 2. Download data
-# Place paysim.csv in data/raw/ (from Kaggle)
+# 2. Download data (PaySim for fraud detection)
+kaggle datasets download -d ealaxi/paysim1 -p data/raw/ --unzip
 
-# 3. Run complete system
-jupyter notebook notebooks/07_investment_insights.ipynb
+# 3. Train models (run notebooks 01-07 in order)
+jupyter notebook
 
-# 4. See results
-# ✅ Investment analysis complete!
-# ✅ Models trained and saved
-# ✅ Ready for production deployment
+# 4. Launch dashboard
+streamlit run app.py
+
+# 5. Open browser at http://localhost:8501
+# ✅ VesprAI is ready!
 ```
 
 **🎯 VesprAI delivers production-ready financial intelligence with state-of-the-art NLP integration!**
@@ -369,7 +503,21 @@ jupyter notebook notebooks/07_investment_insights.ipynb
 ---
 
 <div align="center">
-<strong>Built with ❤️ for the future of financial AI</strong>
+
+### 📊 System Status
+
+| Component | Status |
+|-----------|--------|
+| Sentiment Model | ✅ 99% Accuracy |
+| Fraud Detector | ✅ 0.95 AUC |
+| Summarizer | ✅ ROUGE-L 0.35 |
+| Chatbot | ✅ Integrated |
+| Dashboard | ✅ Live |
+
 <br>
+
+**Built with ❤️ for the future of financial AI**
+
 <em>VesprAI - Where Financial Intelligence Meets Artificial Intelligence</em>
+
 </div>

@@ -1,5 +1,5 @@
 """
-VesprAI Investment Insight Generator - Module 4
+VesprAI Investment Insight Generator - Module 4 (FIXED)
 Integrates sentiment analysis, document summarization, and fraud detection for investment insights
 """
 import pandas as pd
@@ -23,10 +23,24 @@ class InvestmentInsightGenerator:
     Combines outputs from all modules to generate comprehensive investment insights
     """
     
+    # Sentiment label mapping for trained DistilBERT model
+    SENTIMENT_LABELS = {
+        'LABEL_0': 'negative',
+        'LABEL_1': 'neutral', 
+        'LABEL_2': 'positive'
+    }
+    
     def __init__(self):
-        self.sentiment_analyzer = None
+        self.sentiment_pipeline = None
         self.document_summarizer = None
         self.fraud_scorer = None
+        
+        # Track which modules are loaded
+        self.modules_loaded = {
+            'sentiment': False,
+            'summarizer': False,
+            'fraud': False
+        }
         
         # Insight scoring weights
         self.weights = {
@@ -50,69 +64,141 @@ class InvestmentInsightGenerator:
             'negative': "🔴 AVOID/SELL: {company} exhibits significant risks with {sentiment_desc} market reception, {doc_desc} financial health, and {risk_desc} risk profile. {key_insights}"
         }
     
-    def load_modules(self, module_paths: Dict[str, str] = None):
+    def load_modules(self, sentiment_model_path: str = None, fraud_model_path: str = None):
         """Load trained models from previous modules"""
+        
+        # Determine paths - check both project root and notebooks folder
+        project_root = Path.cwd().parent if Path.cwd().name == 'notebooks' else Path.cwd()
+        
+        # Default paths
+        if sentiment_model_path is None:
+            # Try multiple possible locations
+            possible_sentiment_paths = [
+                project_root / 'models' / 'final_model',
+                Path('models') / 'final_model',
+                Path('../models/final_model'),
+            ]
+            for p in possible_sentiment_paths:
+                if p.exists():
+                    sentiment_model_path = p
+                    break
+        
+        if fraud_model_path is None:
+            possible_fraud_paths = [
+                Path('models') / 'best_fraud_scorer',  # Relative to notebooks/
+                project_root / 'models' / 'best_fraud_scorer',
+                Path('../models/best_fraud_scorer'),
+            ]
+            for p in possible_fraud_paths:
+                if p.exists():
+                    fraud_model_path = p
+                    break
+        
+        # Load Module 1: Sentiment Analyzer (Trained DistilBERT)
         try:
-            # Import modules (adjust paths as needed)
-            import sys
-            from pathlib import Path
+            from transformers import pipeline
             
-            # Add src to path if not already there
-            src_path = Path.cwd() / "src"
-            if src_path.exists():
-                sys.path.append(str(src_path))
-            
-            # Load Module 1: Sentiment Analyzer
-            try:
-                from sentiment_analyzer import SentimentAnalyzer
-                self.sentiment_analyzer = SentimentAnalyzer()
-                logger.info("✅ Loaded Module 1: Sentiment Analyzer")
-            except ImportError:
-                logger.warning("⚠️ Could not import sentiment analyzer - will use fallback")
-            
-            # Load Module 2: Document Summarizer  
-            try:
-                from document_summarizer import DocumentSummarizer
-                self.document_summarizer = DocumentSummarizer()
-                logger.info("✅ Loaded Module 2: Document Summarizer")
-            except ImportError:
-                logger.warning("⚠️ Could not import document summarizer - will use fallback")
-            
-            # Load Module 3: Fraud Risk Scorer
-            try:
-                from unified_fraud_risk_scorer import UnifiedFraudRiskScorer
-                self.fraud_scorer = UnifiedFraudRiskScorer()
-                logger.info("✅ Loaded Module 3: Fraud Risk Scorer")
-            except ImportError:
-                logger.warning("⚠️ Could not import fraud scorer - will use fallback")
-                
+            if sentiment_model_path and Path(sentiment_model_path).exists():
+                self.sentiment_pipeline = pipeline(
+                    "sentiment-analysis",
+                    model=str(sentiment_model_path),
+                    tokenizer=str(sentiment_model_path),
+                    return_all_scores=True
+                )
+                self.modules_loaded['sentiment'] = True
+                logger.info(f"✅ Loaded Module 1: Sentiment Analyzer from {sentiment_model_path}")
+            else:
+                logger.warning(f"⚠️ Sentiment model not found at {sentiment_model_path}")
         except Exception as e:
-            logger.error(f"Error loading modules: {e}")
-            logger.info("Will use fallback scoring methods")
+            logger.warning(f"⚠️ Could not load sentiment analyzer: {e}")
+        
+        # Load Module 2: Document Summarizer (T5-small pretrained)
+        try:
+            from document_summarizer import DocumentSummarizer
+            self.document_summarizer = DocumentSummarizer(model_name="t5-small")
+            self.modules_loaded['summarizer'] = True
+            logger.info("✅ Loaded Module 2: Document Summarizer (T5-small)")
+        except ImportError:
+            try:
+                # Try with src prefix
+                import sys
+                sys.path.append(str(project_root / 'src'))
+                from document_summarizer import DocumentSummarizer
+                self.document_summarizer = DocumentSummarizer(model_name="t5-small")
+                self.modules_loaded['summarizer'] = True
+                logger.info("✅ Loaded Module 2: Document Summarizer (T5-small)")
+            except Exception as e:
+                logger.warning(f"⚠️ Could not load document summarizer: {e}")
+        
+        # Load Module 3: Fraud Risk Scorer (Trained Hybrid Model)
+        try:
+            from unified_fraud_risk_scorer import UnifiedFraudRiskScorer
+            self.fraud_scorer = UnifiedFraudRiskScorer(model_name="all-MiniLM-L6-v2")
+            
+            # Load trained weights if available
+            if fraud_model_path and Path(fraud_model_path).exists():
+                classifier_path = Path(fraud_model_path) / "best_classifier.joblib"
+                if classifier_path.exists():
+                    self.fraud_scorer.hybrid_classifier = joblib.load(classifier_path)
+                    self.fraud_scorer.text_scaler = joblib.load(Path(fraud_model_path) / "best_text_scaler.joblib")
+                    self.fraud_scorer.numeric_scaler = joblib.load(Path(fraud_model_path) / "best_numeric_scaler.joblib")
+                    self.fraud_scorer.hybrid_trained = True
+                    logger.info(f"✅ Loaded Module 3: Fraud Detector (Trained Hybrid, AUC ~0.95)")
+                else:
+                    logger.warning(f"⚠️ Fraud model weights not found, using base scorer")
+            
+            self.modules_loaded['fraud'] = True
+        except ImportError:
+            try:
+                import sys
+                sys.path.append(str(project_root / 'src'))
+                from unified_fraud_risk_scorer import UnifiedFraudRiskScorer
+                self.fraud_scorer = UnifiedFraudRiskScorer(model_name="all-MiniLM-L6-v2")
+                self.modules_loaded['fraud'] = True
+                logger.info("✅ Loaded Module 3: Fraud Risk Scorer (Base)")
+            except Exception as e:
+                logger.warning(f"⚠️ Could not load fraud scorer: {e}")
+        
+        # Summary
+        loaded_count = sum(self.modules_loaded.values())
+        logger.info(f"📊 Modules loaded: {loaded_count}/3")
     
     def analyze_sentiment(self, news_text: str) -> Dict[str, Any]:
-        """Analyze sentiment from news text"""
+        """Analyze sentiment from news text using trained DistilBERT"""
         try:
-            if self.sentiment_analyzer:
-                # Use real sentiment analyzer
-                result = self.sentiment_analyzer.predict(news_text)
-                if isinstance(result, dict):
-                    sentiment_score = result.get('confidence', 0.5)
-                    sentiment_label = result.get('label', 'neutral')
-                else:
-                    # Handle different return formats
-                    sentiment_score = float(result) if hasattr(result, '__float__') else 0.5
-                    sentiment_label = 'positive' if sentiment_score > 0.6 else 'negative' if sentiment_score < 0.4 else 'neutral'
+            if self.sentiment_pipeline and self.modules_loaded['sentiment']:
+                # Use trained sentiment model
+                result = self.sentiment_pipeline(news_text)
+                
+                # Parse results - pipeline returns list of list of dicts
+                scores = {}
+                for item in result[0]:
+                    label = self.SENTIMENT_LABELS.get(item['label'], item['label'])
+                    scores[label] = item['score']
+                
+                # Find best prediction
+                best_label = max(scores, key=scores.get)
+                best_score = scores[best_label]
+                
+                # Convert to numeric score (0-1 scale)
+                # positive = high, negative = low
+                sentiment_score = (
+                    scores.get('positive', 0) * 1.0 +
+                    scores.get('neutral', 0) * 0.5 +
+                    scores.get('negative', 0) * 0.0
+                )
+                
+                return {
+                    'score': sentiment_score,
+                    'label': best_label,
+                    'confidence': best_score,
+                    'all_scores': scores,
+                    'text_sample': news_text[:100] + "..." if len(news_text) > 100 else news_text,
+                    'model_used': 'trained_distilbert'
+                }
             else:
                 # Fallback: Simple keyword-based sentiment
-                sentiment_score, sentiment_label = self._fallback_sentiment(news_text)
-            
-            return {
-                'score': sentiment_score,
-                'label': sentiment_label,
-                'confidence': sentiment_score,
-                'text_sample': news_text[:100] + "..." if len(news_text) > 100 else news_text
-            }
+                return self._fallback_sentiment(news_text)
             
         except Exception as e:
             logger.warning(f"Sentiment analysis failed: {e}")
@@ -120,47 +206,50 @@ class InvestmentInsightGenerator:
     
     def _fallback_sentiment(self, text: str) -> Dict[str, Any]:
         """Fallback sentiment analysis using keywords"""
-        positive_words = ['good', 'great', 'excellent', 'strong', 'growth', 'profit', 'success', 'beat', 'exceed', 'positive', 'bullish', 'up']
-        negative_words = ['bad', 'poor', 'weak', 'loss', 'decline', 'fall', 'negative', 'bearish', 'down', 'concern', 'risk', 'warning']
+        positive_words = ['good', 'great', 'excellent', 'strong', 'growth', 'profit', 'success', 'beat', 'exceed', 'positive', 'bullish', 'up', 'record', 'optimism']
+        negative_words = ['bad', 'poor', 'weak', 'loss', 'decline', 'fall', 'negative', 'bearish', 'down', 'concern', 'risk', 'warning', 'miss', 'disappoint']
         
         text_lower = text.lower()
         pos_count = sum(1 for word in positive_words if word in text_lower)
         neg_count = sum(1 for word in negative_words if word in text_lower)
         
         if pos_count > neg_count:
-            score = 0.6 + (pos_count - neg_count) * 0.1
+            score = min(1.0, 0.6 + (pos_count - neg_count) * 0.05)
             label = 'positive'
         elif neg_count > pos_count:
-            score = 0.4 - (neg_count - pos_count) * 0.1
+            score = max(0.0, 0.4 - (neg_count - pos_count) * 0.05)
             label = 'negative'
         else:
             score = 0.5
             label = 'neutral'
         
-        score = max(0.0, min(1.0, score))
-        
         return {
             'score': score,
             'label': label,
-            'confidence': score,
-            'text_sample': text[:100] + "..." if len(text) > 100 else text
+            'confidence': abs(score - 0.5) * 2,  # Confidence based on distance from neutral
+            'all_scores': {'positive': score if label == 'positive' else 0, 
+                          'neutral': score if label == 'neutral' else 0,
+                          'negative': score if label == 'negative' else 0},
+            'text_sample': text[:100] + "..." if len(text) > 100 else text,
+            'model_used': 'keyword_fallback'
         }
     
     def analyze_document(self, document_text: str) -> Dict[str, Any]:
         """Analyze document quality and extract insights"""
         try:
-            if self.document_summarizer:
-                # Use real document summarizer
+            if self.document_summarizer and self.modules_loaded['summarizer']:
+                # Use T5 document summarizer
                 summary = self.document_summarizer.summarize(document_text)
                 
-                # Calculate quality metrics
-                quality_score = min(1.0, len(summary) / 100)  # Simple quality metric
+                # Calculate quality metrics based on content
+                quality_score = self._calculate_document_quality(document_text, summary)
                 
                 return {
                     'summary': summary,
                     'quality_score': quality_score,
                     'key_insights': self._extract_key_insights(summary),
-                    'document_length': len(document_text)
+                    'document_length': len(document_text),
+                    'model_used': 't5_summarizer'
                 }
             else:
                 # Fallback document analysis
@@ -170,23 +259,41 @@ class InvestmentInsightGenerator:
             logger.warning(f"Document analysis failed: {e}")
             return self._fallback_document_analysis(document_text)
     
+    def _calculate_document_quality(self, original: str, summary: str) -> float:
+        """Calculate document quality score based on content analysis"""
+        quality_indicators = {
+            'positive': ['revenue growth', 'profit', 'earnings', 'strong', 'increase', 'success', 'beat', 'exceeded'],
+            'negative': ['loss', 'decline', 'decrease', 'weak', 'concern', 'risk', 'warning', 'miss']
+        }
+        
+        text_lower = original.lower()
+        pos_count = sum(1 for phrase in quality_indicators['positive'] if phrase in text_lower)
+        neg_count = sum(1 for phrase in quality_indicators['negative'] if phrase in text_lower)
+        
+        # Base score
+        base_score = 0.5 + (pos_count - neg_count) * 0.08
+        
+        # Bonus for comprehensive documents
+        if len(original) > 500:
+            base_score += 0.1
+        
+        return max(0.0, min(1.0, base_score))
+    
     def _fallback_document_analysis(self, text: str) -> Dict[str, Any]:
         """Fallback document analysis"""
         # Simple extractive summarization
-        sentences = text.split('. ')[:3]  # Take first 3 sentences
+        sentences = text.split('. ')[:3]
         summary = '. '.join(sentences) + '.'
         
-        # Simple quality scoring based on document characteristics
-        quality_indicators = ['revenue', 'profit', 'earnings', 'growth', 'financial', 'performance']
-        quality_score = min(1.0, sum(1 for word in quality_indicators if word.lower() in text.lower()) / 10)
-        
+        quality_score = self._calculate_document_quality(text, summary)
         key_insights = self._extract_key_insights(summary)
         
         return {
             'summary': summary,
             'quality_score': quality_score,
             'key_insights': key_insights,
-            'document_length': len(text)
+            'document_length': len(text),
+            'model_used': 'fallback'
         }
     
     def _extract_key_insights(self, text: str) -> List[str]:
@@ -194,34 +301,49 @@ class InvestmentInsightGenerator:
         insights = []
         text_lower = text.lower()
         
-        # Financial indicators
-        if 'revenue' in text_lower or 'sales' in text_lower:
-            insights.append("Revenue/sales performance highlighted")
-        if 'profit' in text_lower or 'earnings' in text_lower:
-            insights.append("Profitability metrics discussed")
-        if 'growth' in text_lower:
-            insights.append("Growth trends identified")
-        if 'risk' in text_lower or 'challenge' in text_lower:
-            insights.append("Risk factors mentioned")
-        if 'market' in text_lower:
-            insights.append("Market conditions analyzed")
-            
-        return insights[:3] if insights else ["General business information provided"]
+        # Financial metrics
+        if any(word in text_lower for word in ['revenue', 'sales', 'income']):
+            insights.append("Financial metrics reported")
+        
+        # Growth indicators
+        if any(word in text_lower for word in ['growth', 'increase', 'up', 'higher']):
+            insights.append("Positive growth trends")
+        
+        # Profitability
+        if any(word in text_lower for word in ['profit', 'margin', 'earnings']):
+            insights.append("Profitability metrics included")
+        
+        # Forward looking
+        if any(word in text_lower for word in ['outlook', 'guidance', 'forecast', 'expect']):
+            insights.append("Forward guidance provided")
+        
+        # Risk factors
+        if any(word in text_lower for word in ['risk', 'challenge', 'concern', 'competition']):
+            insights.append("Risk factors identified")
+        
+        return insights if insights else ["Standard financial disclosure"]
     
     def assess_risk(self, document_text: str) -> Dict[str, Any]:
-        """Assess risk factors from document"""
+        """Assess investment risk from document"""
         try:
-            if self.fraud_scorer:
-                # Use real fraud risk scorer for risk assessment
-                risk_result = self.fraud_scorer.score_transaction(document_text, method="unsupervised")
+            if self.fraud_scorer and self.modules_loaded['fraud']:
+                # Use fraud scorer for risk assessment (inverse of fraud risk)
+                result = self.fraud_scorer.score_transaction(
+                    text=document_text,
+                    method="unsupervised"
+                )
+                
+                # Convert fraud risk to investment safety score (inverse)
+                fraud_risk = result.get('risk_score', 0.5)
+                safety_score = 1.0 - fraud_risk
                 
                 return {
-                    'risk_score': 1.0 - risk_result.get('risk_percentage', 50) / 100,  # Invert for investment risk
-                    'risk_level': 'low' if risk_result.get('risk_level') == 'LOW' else 'medium',
-                    'risk_factors': self._identify_risk_factors(document_text)
+                    'risk_score': safety_score,
+                    'risk_level': 'LOW' if safety_score > 0.7 else 'MEDIUM' if safety_score > 0.4 else 'HIGH',
+                    'risk_factors': self._identify_risk_factors(document_text),
+                    'model_used': 'trained_fraud_scorer'
                 }
             else:
-                # Fallback risk assessment
                 return self._fallback_risk_assessment(document_text)
                 
         except Exception as e:
@@ -230,36 +352,33 @@ class InvestmentInsightGenerator:
     
     def _fallback_risk_assessment(self, text: str) -> Dict[str, Any]:
         """Fallback risk assessment"""
-        risk_indicators = ['debt', 'lawsuit', 'investigation', 'decline', 'loss', 'warning', 'concern', 'volatility']
-        positive_indicators = ['stable', 'growth', 'strong', 'solid', 'healthy']
+        risk_factors = self._identify_risk_factors(text)
         
-        text_lower = text.lower()
-        risk_count = sum(1 for word in risk_indicators if word in text_lower)
-        positive_count = sum(1 for word in positive_indicators if word in text_lower)
-        
-        # Calculate risk score (higher = less risky)
-        risk_score = max(0.2, min(1.0, 0.7 - (risk_count * 0.1) + (positive_count * 0.05)))
-        
-        risk_level = 'low' if risk_score > 0.7 else 'medium' if risk_score > 0.4 else 'high'
+        # Score based on number of risk factors
+        risk_score = max(0.3, 0.8 - len(risk_factors) * 0.1)
         
         return {
             'risk_score': risk_score,
-            'risk_level': risk_level,
-            'risk_factors': self._identify_risk_factors(text)
+            'risk_level': 'LOW' if risk_score > 0.7 else 'MEDIUM' if risk_score > 0.4 else 'HIGH',
+            'risk_factors': risk_factors,
+            'model_used': 'fallback'
         }
     
     def _identify_risk_factors(self, text: str) -> List[str]:
-        """Identify specific risk factors"""
+        """Identify risk factors in text"""
         risks = []
         text_lower = text.lower()
         
         risk_mapping = {
-            'debt': "High debt levels",
-            'lawsuit': "Legal proceedings",
-            'competition': "Competitive pressures",
-            'regulation': "Regulatory risks",
+            'competition': "Competitive pressure",
+            'regulatory': "Regulatory challenges",
+            'debt': "Debt concerns",
+            'litigation': "Legal risks",
+            'supply chain': "Supply chain risks",
             'market volatility': "Market volatility",
-            'economic': "Economic uncertainty"
+            'economic': "Economic uncertainty",
+            'decline': "Performance decline",
+            'loss': "Financial losses"
         }
         
         for keyword, risk_desc in risk_mapping.items():
@@ -270,9 +389,9 @@ class InvestmentInsightGenerator:
     
     def calculate_overall_score(self, sentiment_result: Dict, document_result: Dict, risk_result: Dict) -> float:
         """Calculate weighted overall investment score"""
-        sentiment_score = sentiment_result['score']
-        document_score = document_result['quality_score']
-        risk_score = risk_result['risk_score']
+        sentiment_score = sentiment_result.get('score', 0.5)
+        document_score = document_result.get('quality_score', 0.5)
+        risk_score = risk_result.get('risk_score', 0.5)
         
         overall_score = (
             sentiment_score * self.weights['sentiment'] +
@@ -307,7 +426,12 @@ class InvestmentInsightGenerator:
             'company': company_name,
             'overall_score': overall_score,
             'recommendation': self._get_recommendation(overall_score),
+            'confidence': overall_score,
             'narrative': insight_narrative,
+            'sentiment_score': sentiment_result.get('score', 0),
+            'document_score': document_result.get('quality_score', 0),
+            'risk_score': risk_result.get('risk_score', 0),
+            'explanation': insight_narrative,
             'components': {
                 'sentiment': sentiment_result,
                 'document': document_result,
@@ -348,7 +472,7 @@ class InvestmentInsightGenerator:
         sentiment_desc = self._describe_sentiment(sentiment)
         doc_desc = self._describe_document(document)
         risk_desc = self._describe_risk(risk)
-        key_insights = '. '.join(document['key_insights'])
+        key_insights = '. '.join(document.get('key_insights', ['Analysis complete']))
         
         template = self.templates[template_key]
         
@@ -362,7 +486,7 @@ class InvestmentInsightGenerator:
     
     def _describe_sentiment(self, sentiment: Dict) -> str:
         """Describe sentiment in narrative form"""
-        score = sentiment['score']
+        score = sentiment.get('score', 0.5)
         if score >= 0.7:
             return "strongly positive"
         elif score >= 0.6:
@@ -374,7 +498,7 @@ class InvestmentInsightGenerator:
     
     def _describe_document(self, document: Dict) -> str:
         """Describe document analysis in narrative form"""
-        score = document['quality_score']
+        score = document.get('quality_score', 0.5)
         if score >= 0.7:
             return "excellent"
         elif score >= 0.5:
@@ -386,7 +510,7 @@ class InvestmentInsightGenerator:
     
     def _describe_risk(self, risk: Dict) -> str:
         """Describe risk assessment in narrative form"""
-        score = risk['risk_score']
+        score = risk.get('risk_score', 0.5)
         if score >= 0.7:
             return "low-risk"
         elif score >= 0.5:
@@ -422,7 +546,8 @@ class InvestmentInsightGenerator:
             'weights': self.weights,
             'templates': self.templates,
             'model_type': 'investment_insight_generator',
-            'version': '1.0'
+            'version': '2.0',  # Updated version
+            'modules_status': self.modules_loaded
         }
         
         with open(model_path / "insight_config.json", "w") as f:
@@ -443,14 +568,15 @@ class InvestmentInsightGenerator:
         
         logger.info(f"Configuration loaded from {model_path}")
 
+
 if __name__ == "__main__":
     # Quick test
     generator = InvestmentInsightGenerator()
     generator.load_modules()
     
     # Test with sample data
-    sample_news = "Apple reports strong quarterly earnings with revenue growth of 15% year-over-year."
-    sample_document = "Apple Inc. continues to demonstrate solid financial performance with strong revenue growth across all segments."
+    sample_news = "Apple reports strong quarterly earnings with revenue growth of 15% year-over-year. The company beat analyst expectations."
+    sample_document = "Apple Inc. continues to demonstrate solid financial performance with strong revenue growth across all segments. Services revenue reached record highs."
     
     result = generator.generate_insight("Apple Inc.", sample_news, sample_document)
     print(json.dumps(result, indent=2))

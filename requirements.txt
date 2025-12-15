@@ -11,3 +11,10 @@ ipykernel>=6.20.0
 evaluate>=0.4.0
 tqdm>=4.65.0
 plotly>=5.14.0
+sentencepiece>=0.1.98
+sentence_transformers>=2.4.0
+kagglehub>=0.11.0
+kaggle>=1.5.12
+datetime>=5.14.0
+streamlit>=1.24.0
+plotly 
