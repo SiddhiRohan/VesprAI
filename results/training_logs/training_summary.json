@@ -2,8 +2,8 @@
   "experiment_info": {
     "model_name": "distilbert-base-uncased",
     "num_labels": 3,
-    "training_date": "2025-12-14T18:06:25.419442",
-    "total_training_time_minutes": 3.8861954967180887
+    "training_date": "2025-12-19T17:04:31.010018",
+    "total_training_time_minutes": 3.9623403867085774
   },
   "dataset_info": {
     "train_size": 714,
@@ -25,25 +25,25 @@
     "logging_steps": 50
   },
   "final_metrics": {
-    "eval_accuracy": 0.9904761904761905,
-    "eval_f1_weighted": 0.9904878312421529,
-    "eval_f1_macro": 0.9911530178685757,
-    "eval_f1_micro": 0.9904761904761905,
-    "eval_precision_weighted": 0.9907482993197279,
-    "eval_recall_weighted": 0.9904761904761905,
+    "eval_accuracy": 1.0,
+    "eval_f1_weighted": 1.0,
+    "eval_f1_macro": 1.0,
+    "eval_f1_micro": 1.0,
+    "eval_precision_weighted": 1.0,
+    "eval_recall_weighted": 1.0,
     "eval_f1_class_0": 1.0,
     "eval_precision_class_0": 1.0,
     "eval_recall_class_0": 1.0,
     "eval_f1_negative": 1.0,
-    "eval_f1_class_1": 0.9855072463768116,
-    "eval_precision_class_1": 0.9714285714285714,
+    "eval_f1_class_1": 1.0,
+    "eval_precision_class_1": 1.0,
     "eval_recall_class_1": 1.0,
-    "eval_f1_neutral": 0.9855072463768116,
-    "eval_f1_class_2": 0.9879518072289156,
+    "eval_f1_neutral": 1.0,
+    "eval_f1_class_2": 1.0,
     "eval_precision_class_2": 1.0,
-    "eval_recall_class_2": 0.9761904761904762,
-    "eval_f1_positive": 0.9879518072289156,
-    "eval_loss": 0.36303401545242026
+    "eval_recall_class_2": 1.0,
+    "eval_f1_positive": 1.0,
+    "eval_loss": 0.3519525428613027
   },
   "model_path": "/Users/ani14kay/Documents/GitHub/VesprAI/models/final_model"
 }

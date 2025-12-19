@@ -85,23 +85,47 @@ class UnifiedFraudRiskScorer:
         
         logger.info("Initialized both unsupervised and hybrid models")
     
-    def load_local_paysim_dataset(self) -> str:
-        """Load local PaySim dataset"""
-        possible_paths = [
-            Path("data/raw/paysim.csv"),
-            Path("../data/raw/paysim.csv"), 
-            Path("../../data/raw/paysim.csv"),
-            Path(r"C:\Users\siddh\Downloads\DATA641 Final (Vespr)\data\raw\paysim.csv"),
-            Path.cwd() / "data" / "raw" / "paysim.csv",
-            Path.cwd().parent / "data" / "raw" / "paysim.csv"
-        ]
+    # def load_local_paysim_dataset(self) -> str:
+    #     """Load local PaySim dataset"""
+    #     possible_paths = [
+    #         Path("data/raw/paysim.csv"),
+    #         Path("../data/raw/paysim.csv"), 
+    #         Path("../notebooks/data/raw/paysim.csv"),
+    #         Path("../../data/raw/paysim.csv"),
+    #         # Path(r"C:\Users\siddh\Downloads\DATA641 Final (Vespr)\data\raw\paysim.csv"),
+    #         Path.cwd() / "data" / "raw" / "paysim.csv",
+    #         Path.cwd().parent / "data" / "raw" / "paysim.csv"
+    #     ]
         
+    #     for paysim_path in possible_paths:
+    #         if paysim_path.exists():
+    #             logger.info(f"✅ Found PaySim dataset: {paysim_path}")
+    #             return str(paysim_path)
+        
+    #     raise FileNotFoundError("PaySim dataset not found. Please place paysim.csv in data/raw/ directory.")
+    # from pathlib import Path
+
+    def load_local_paysim_dataset(self) -> str:
+        """Load local PaySim dataset with robust path resolution"""
+
+        # Project root = parent of src/
+        project_root = Path(__file__).resolve().parent.parent
+
+        possible_paths = [
+            project_root / "data" / "raw" / "paysim.csv",
+            project_root / "notebooks" / "data" / "raw" / "paysim.csv",
+        ]
+
         for paysim_path in possible_paths:
             if paysim_path.exists():
                 logger.info(f"✅ Found PaySim dataset: {paysim_path}")
                 return str(paysim_path)
-        
-        raise FileNotFoundError("PaySim dataset not found. Please place paysim.csv in data/raw/ directory.")
+
+        raise FileNotFoundError(
+            "PaySim dataset not found. Expected paysim.csv in:\n"
+            " - data/raw/\n"
+            " - notebooks/data/raw/"
+        )
     
     def load_paysim_data(self, sample_size: int = 50000) -> pd.DataFrame:
         """Load and preprocess PaySim data"""
